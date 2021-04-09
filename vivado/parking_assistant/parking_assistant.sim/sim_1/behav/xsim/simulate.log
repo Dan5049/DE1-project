@@ -1,6 +1,0 @@
-Vivado Simulator 2020.2
-Time resolution is 1 ps
-Note: Stimulus process started
-Time: 0 ps  Iteration: 0  Process: /tb_clock_enable/p_stimulus  File: D:/Projects/DE1-project/vivado/parking_assistant/parking_assistant.srcs/sim_1/imports/new/tb_clock_enable.vhd
-Note: Stimulus process finished
-Time: 0 ps  Iteration: 0  Process: /tb_clock_enable/p_stimulus  File: D:/Projects/DE1-project/vivado/parking_assistant/parking_assistant.srcs/sim_1/imports/new/tb_clock_enable.vhd
