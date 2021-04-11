@@ -4,35 +4,32 @@ use ieee.numeric_std.all;   -- Package for arithmetic operations
 
 entity trigger is
 port(
-    Clk     : in std_logic;
-    Rst     : in std_logic;
-    Trig    : out std_logic);
+    clk     : in std_logic; --clock
+    rst     : in std_logic; --reset
+    trig    : out std_logic); --trigger
 end entity trigger;
 
 architecture Behavioral of trigger is 
-    signal Tick     : integer; 
+    signal tick     : integer; --time counter, one tick is 10ns
 begin
 
-    process(Clk)is
+    process(clk)is
     begin
-        if rising_edge(Clk) then
-            if Rst = '1' then
-                Trig <= '0'; 
-                Tick <= 0;           
+        if rising_edge(clk) then
+            if rst = '1' then --if reset is 1, set trigger and time counter to 0
+                trig <= '0'; 
+                tick <= 0;           
             else
-                if (Tick < 10000000) then
-                    if rising_edge(clk) then
-                        Tick <= Tick + 1;
-                        if (Tick <= 1000) then
-                            Trig <= '1';
-                        else
-                            Trig <= '0';
-                        end if;
-                    end if;
+                if (tick <= 1000) then --set trrigger to 1 for time equal to 1000 ticks (10us)
+                    trig <= '1';
+                    tick <= tick + 1;
+                elsif (tick < 10000000 and tick >= 1000) then --set trigger to 0 for the rest of the time of 100ms
+                    tick <= tick + 1;
+                    trig <= '0';
                 else 
-                    Tick <= 0;
+                    tick <= 0; --reset time counting
                 end if;
-            end if;
-        end if;
+           end if;
+       end if;
     end process;
 end architecture Behavioral;

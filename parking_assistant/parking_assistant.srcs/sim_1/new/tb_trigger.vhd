@@ -7,29 +7,29 @@ end entity tb_trigger;
 
 architecture testbench of tb_trigger is
 
-   constant ClockFrequency : integer := 100e6; -- 100 MHz
-   constant ClockPeriod    : time    := 1000 ms / ClockFrequency;
+   constant clk_freq : integer := 100e6; -- 100 MHz
+   constant clk_per    : time    := 1000 ms / clk_freq;
  
-   signal Clk   : std_logic := '1';
-   signal Rst    : std_logic := '0';
-   signal Trig   : std_logic := '0';
+   signal clk    : std_logic := '1';
+   signal rst    : std_logic := '0';
+   signal trig   : std_logic := '0';
    
 begin
     
-    i_clock_enable: entity work.trigger(Behavioral)
+    uut_trigger: entity work.trigger(Behavioral)
     port map(
-        Clk  => Clk,
-        Rst  => Rst,
-        Trig => Trig);
+        clk  => clk,
+        rst  => rst,
+        trig => trig);
         
-    Clk <= not Clk after ClockPeriod / 2;
+    clk <= not clk after clk_per / 2;
     
     process is
     begin    
-        Rst <= '1';
+        rst <= '1';
         
-        wait for 100 ms;
-        Rst <= '0';
+        wait for 100 ms; --first period of trigger (100ms), reset on
+        rst <= '0'; --the rest of the time reset off
         wait;
     end process;
 
