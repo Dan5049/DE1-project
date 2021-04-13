@@ -12,6 +12,7 @@ end entity dist;
 architecture Behavioral of dist is 
     signal tick     : integer;
     signal dist     : integer; 
+  
 begin
 
     process(clk, echo)is

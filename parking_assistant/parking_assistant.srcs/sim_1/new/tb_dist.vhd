@@ -13,7 +13,7 @@ architecture testbench of tb_dist is
    signal clk    : std_logic := '1';
    signal rst    : std_logic := '0';
    signal echo   : std_logic := '0';
-   
+  
 begin
     
     uut_dist: entity work.dist(Behavioral)
@@ -35,10 +35,16 @@ begin
     p_assert_gen : process is
     begin    
         echo <= '1'; 
-        wait for 200 ms;         
+        wait for 50 ms;         
         echo <= '0'; 
         wait for 100 ms;
         echo <= '1';
+        wait for 10ms;
+        echo <= '0';
+        wait for 50ms;
+        echo <= '1';
+        wait for 5ms;
+        echo <= '0';
         wait;
     end process;
 
