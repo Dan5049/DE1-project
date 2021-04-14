@@ -13,6 +13,7 @@ architecture testbench of tb_dist is
    signal s_clk    : std_logic := '1';
    signal s_rst    : std_logic := '0';
    signal s_echo   : std_logic := '0';
+   signal s_buzz   : std_logic := '0';
   
 begin
     
@@ -20,6 +21,7 @@ begin
     port map(
         clk  => s_clk,
         echo => s_echo,
+        buzz => s_buzz,
         rst  => s_rst);
         
     s_clk <= not s_clk after clk_per / 2;
@@ -51,5 +53,6 @@ begin
         s_echo <= '0';
         wait;
     end process p_echo_gen;
+    
 
 end architecture testbench;
