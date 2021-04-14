@@ -31,6 +31,6 @@ begin
         wait for 100 ms; --first period of trigger (100ms), reset on
         s_rst <= '0'; --the rest of the time reset off
         wait;
-    end process;
+    end process p_reset_gen;
 
 end architecture testbench;

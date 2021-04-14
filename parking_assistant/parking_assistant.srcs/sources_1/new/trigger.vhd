@@ -31,5 +31,5 @@ begin
                 end if;
            end if;
        end if;
-    end process;
+    end process p_trigger;
 end architecture Behavioral;
