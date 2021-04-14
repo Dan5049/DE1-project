@@ -13,7 +13,7 @@ architecture Behavioral of trigger is
     signal tick     : integer; --time counter, one tick is 10ns
 begin
 
-    process(clk)is
+    p_trigger : process(clk)is
     begin
         if rising_edge(clk) then
             if rst = '1' then --if reset is 1, set trigger and time counter to 0

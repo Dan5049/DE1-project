@@ -12,10 +12,11 @@ end entity dist;
 architecture Behavioral of dist is 
     signal tick     : integer;
     signal dist     : integer; 
+    --signal read     : std_logic;
   
 begin
 
-    process(clk, echo)is
+    p_distance : process(clk, echo)is
     begin
         if rising_edge(clk) then
             if rst = '1' then

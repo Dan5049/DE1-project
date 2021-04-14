@@ -32,7 +32,7 @@ begin
         wait;
     end process;
     
-    p_assert_gen : process is
+    p_echo_gen : process is
     begin    
         s_echo <= '1'; 
         wait for 50 ms;         

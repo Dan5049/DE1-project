@@ -24,7 +24,7 @@ begin
         
     s_clk <= not s_clk after clk_per / 2;
     
-    process is
+    p_reset_gen : process is
     begin    
         s_rst <= '1';
         
