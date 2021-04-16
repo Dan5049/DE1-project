@@ -41,7 +41,7 @@ begin
         s_echo <= '0'; 
         wait for 50 ms;
         s_echo <= '1';
-        wait for 10 ms;
+        wait for 8.5 ms;
         s_echo <= '0';
         wait for 50 ms;
         s_echo <= '1';

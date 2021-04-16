@@ -14,7 +14,9 @@ end entity dist;
 architecture Behavioral of dist is 
     signal tick     : integer;
     signal dist     : integer;
-    signal buzz_per : time;
+    signal tock     : integer;
+    signal tock_on  : integer;
+    signal tock_off : integer;
 begin
 
     p_distance : process(clk, echo)is
@@ -38,45 +40,77 @@ begin
     begin
         if dist > 4000 then
             leds <= "0000000000";
+            tock_on <= 0;
+            tock_off <= 0;
         end if; 
         if falling_edge (echo) then
             if (dist <= 4000 and dist >= 150) then
                 leds <= "0000000001";
+                tock_on <= 500000;
+                tock_off <= 1000000;
             elsif (dist < 150 and dist >= 100) then
                 leds <= "0000000011";
+                tock_on <= 50000;
+                tock_off <= 100000;
             elsif (dist < 100 and dist >= 80) then
                 leds <= "0000000111";
+                tock_on <= 5000;
+                tock_off <= 10000;
             elsif (dist < 80 and dist >= 70) then
-                leds <= "0000001111"; 
+                leds <= "0000001111";
+                tock_on <= 500;
+                tock_off <= 1000; 
             elsif (dist < 70 and dist >= 60) then
                 leds <= "0000011111";
+                tock_on <= 50;
+                tock_off <= 100;
             elsif (dist < 60 and dist >= 50) then
                 leds <= "0000111111";
+                tock_on <= 5;
+                tock_off <= 10;
             elsif (dist < 50 and dist >= 40) then
                 leds <= "0001111111";
+                tock_on <= 5;
+                tock_off <= 10;
             elsif (dist < 40 and dist >= 35) then
                 leds <= "0011111111";
+                tock_on <= 5;
+                tock_off <= 10;
             elsif (dist < 35 and dist >= 30) then
                 leds <= "0111111111";
+                tock_on <= 5;
+                tock_off <= 10;
             elsif dist < 30 then
                 leds <= "1111111111";
+                tock_on <= 5;
+                tock_off <= 10;
             else
                 leds <= "0000000000";
+                tock_on <= 0;
+                tock_off <= 0;
             end if;
        end if;    
     end process p_bargraf;
     
---    p_buzz : process (dist)
---    begin
---        if dist > 4000 then
---            buzz_per <= 1000 us;
---        elsif dist < 30 then
---            buzz_per <= 10000000 us;
---        else
---            buzz_per <= (dist / 8000) * 1 ns;
---        end if;
---        buzz <= not buzz after buzz_per / 2;
---    end process p_buzz;
+p_buzz : process(clk, tock, tock_on, tock_off)is
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then 
+                buzz        <= '0';
+                tock        <= 0;     
+            else
+                if (tock <= tock_on) then 
+                    buzz <= '1';
+                    tock <= tock + 1;
+                elsif (tock < tock_off and tock >= tock_on) then 
+                    tock <= tock + 1;
+                    buzz <= '0';
+                else 
+                    tock <= 0; 
+                end if;
+           end if;
+       end if;
+    end process p_buzz;
     
 end architecture Behavioral;
 
