@@ -12,7 +12,7 @@ architecture testbench of tb_trigger is
  
    signal s_clk    : std_logic := '1';
    signal s_rst    : std_logic := '0';
-   signal s_trig   : std_logic := '0';
+   signal s_trig_o   : std_logic := '0';
    
 begin
     
@@ -20,7 +20,7 @@ begin
     port map(
         clk  => s_clk,
         rst  => s_rst,
-        trig => s_trig);
+        trig_o => s_trig_o);
         
     s_clk <= not s_clk after clk_per / 2;
     

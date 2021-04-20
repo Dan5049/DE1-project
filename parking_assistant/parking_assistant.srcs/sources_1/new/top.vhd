@@ -49,14 +49,14 @@ begin
         port map (
             clk     => CLK100MHZ,
             rst     => btn(0),
-            trig    => ja(0));
+            trig_o    => ja(0));
             
     dist_top    : entity work.dist
         port map (
-            clk                   => CLK100MHZ,
-            rst                   => btn(0),  
-            echo                  => ja(1),
-            buzz                  => ja(2), 
-            leds(5 - 1 downto 0)  => ja(8 - 1 downto 3),
-            leds(10 - 1 downto 5) => jb(5 - 1 downto 0)); 
+            clk                     => CLK100MHZ,
+            rst                     => btn(0),  
+            echo_i                  => ja(1),
+            buzz_o                  => ja(2), 
+            leds_o(5 - 1 downto 0)  => ja(8 - 1 downto 3),
+            leds_o(10 - 1 downto 5) => jb(5 - 1 downto 0)); 
 end Behavioral;

@@ -7,22 +7,22 @@ end entity tb_dist;
 
 architecture testbench of tb_dist is
 
-   constant clk_freq : integer := 100e6; -- 100 MHz
+   constant clk_freq   : integer := 100e6; -- 100 MHz
    constant clk_per    : time    := 1000 ms / clk_freq;
  
-   signal s_clk    : std_logic := '1';
-   signal s_rst    : std_logic := '0';
-   signal s_echo   : std_logic := '0';
-   signal s_buzz   : std_logic := '0';
+   signal s_clk      : std_logic := '1';
+   signal s_rst      : std_logic := '0';
+   signal s_echo_i   : std_logic := '0';
+   signal s_buzz_o   : std_logic := '0';
   
 begin
     
     uut_dist: entity work.dist(Behavioral)
     port map(
-        clk  => s_clk,
-        echo => s_echo,
-        buzz => s_buzz,
-        rst  => s_rst);
+        clk    => s_clk,
+        echo_i => s_echo_i,
+        buzz_o => s_buzz_o,
+        rst    => s_rst);
         
     s_clk <= not s_clk after clk_per / 2;
     
@@ -36,21 +36,21 @@ begin
     
     p_echo_gen : process is
     begin    
-        s_echo <= '1'; 
+        s_echo_i <= '1'; 
         wait for 50 ms;         
-        s_echo <= '0'; 
+        s_echo_i <= '0'; 
         wait for 50 ms;
-        s_echo <= '1';
+        s_echo_i <= '1';
         wait for 8.5 ms;
-        s_echo <= '0';
+        s_echo_i <= '0';
         wait for 50 ms;
-        s_echo <= '1';
+        s_echo_i <= '1';
         wait for 23.2 ms;
-        s_echo <= '0';
+        s_echo_i <= '0';
         wait for 50ms;
-        s_echo <= '1';
+        s_echo_i <= '1';
         wait for 5ms;
-        s_echo <= '0';
+        s_echo_i <= '0';
         wait;
     end process p_echo_gen;
     

@@ -44,7 +44,7 @@ architecture Behavioral of tb_top is
        
     signal s_echo_i : std_logic;                 
     signal s_buzz_o : std_logic;                 
-    signal s_leds_o : std_logic_vector (10 - 1 downto 0);
+    signal s_leds_o_o : std_logic_vector (10 - 1 downto 0);
 
 begin
     uut_top : entity work.top
@@ -55,14 +55,15 @@ begin
          
          ja(1)               => s_echo_i,
          ja(2)               => s_buzz_o,
-         ja(8 - 1 downto 3)  => s_leds_o(5 - 1 downto 0),
-         jb(5 - 1 downto 0)  => s_leds_o(10 - 1 downto 5));
+         ja(8 - 1 downto 3)  => s_leds_o_o(5 - 1 downto 0),
+         jb(5 - 1 downto 0)  => s_leds_o_o(10 - 1 downto 5));
          
    s_clk <= not s_clk after clk_per / 2;
     
    p_reset_gen : process
    begin   
         s_rst <= '1';
+        s_echo_i <= '0';
         wait for 100 ms;
         s_rst <= '0';
         wait;       
