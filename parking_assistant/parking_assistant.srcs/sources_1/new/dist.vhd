@@ -92,31 +92,6 @@ begin
        end if;    
     end process p_bargraf;
     
---  p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
---  begin
---        if rising_edge(clk) then
---            if rst = '1' then 
---                buzz_o       <= '0';
---                s_tock       <= 0;     
---            else
---                if rising_edge(echo_i) then
---                    s_tock <= 0;
---                else
---                    if (s_tock <= s_tock_on) then 
---                        buzz_o <= '1';
---                        s_tock <= s_tock + 1;
---                    elsif (s_tock < s_tock_off and s_tock >= s_tock_on) then 
---                        s_tock <= s_tock + 1;
---                        buzz_o <= '0';
---                    else 
---                        s_tock <= 0;
---                        buzz_o <= '0'; 
---                    end if;
---                end if;
---           end if;
---       end if;
---    end process p_buzz;
-    
     p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
     begin
         if rising_edge(clk) then
