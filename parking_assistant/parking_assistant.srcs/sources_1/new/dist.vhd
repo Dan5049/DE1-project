@@ -47,39 +47,39 @@ begin
             if (s_dist <= 4000 and s_dist >= 150) then
                 leds_o <= "0000000001";
                 s_tock_on <= 3000000;
-                s_tock_off <= 97000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 150 and s_dist >= 100) then
                 leds_o <= "0000000011";
-                s_tock_on <= 3000000;
-                s_tock_off <= 95500000;
+                s_tock_on <= 3500000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 100 and s_dist >= 80) then
                 leds_o <= "0000000111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 94000000;
+                s_tock_on <= 4000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 80 and s_dist >= 70) then
                 leds_o <= "0000001111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 91000000; 
+                s_tock_on <= 4500000;
+                s_tock_off <= 10000000; 
             elsif (s_dist < 70 and s_dist >= 60) then
                 leds_o <= "0000011111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 88000000;
+                s_tock_on <= 5000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 60 and s_dist >= 50) then
                 leds_o <= "0000111111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 82000000;
+                s_tock_on <= 6000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 50 and s_dist >= 40) then
                 leds_o <= "0001111111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 76000000;
+                s_tock_on <= 7000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 40 and s_dist >= 35) then
                 leds_o <= "0011111111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 70000000;
+                s_tock_on <= 8000000;
+                s_tock_off <= 10000000;
             elsif (s_dist < 35 and s_dist >= 30) then
                 leds_o <= "0111111111";
-                s_tock_on <= 3000000;
-                s_tock_off <= 64000000;
+                s_tock_on <= 9000000;
+                s_tock_off <= 10000000;
             elsif s_dist < 30 then
                 leds_o <= "1111111111";
                 s_tock_on <= 3000000;
@@ -92,24 +92,53 @@ begin
        end if;    
     end process p_bargraf;
     
-p_buzz : process(clk, s_tock, s_tock_on, s_tock_off)is
+--  p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
+--  begin
+--        if rising_edge(clk) then
+--            if rst = '1' then 
+--                buzz_o       <= '0';
+--                s_tock       <= 0;     
+--            else
+--                if rising_edge(echo_i) then
+--                    s_tock <= 0;
+--                else
+--                    if (s_tock <= s_tock_on) then 
+--                        buzz_o <= '1';
+--                        s_tock <= s_tock + 1;
+--                    elsif (s_tock < s_tock_off and s_tock >= s_tock_on) then 
+--                        s_tock <= s_tock + 1;
+--                        buzz_o <= '0';
+--                    else 
+--                        s_tock <= 0;
+--                        buzz_o <= '0'; 
+--                    end if;
+--                end if;
+--           end if;
+--       end if;
+--    end process p_buzz;
+    
+    p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
     begin
         if rising_edge(clk) then
-            if rst = '1' then 
-                buzz_o       <= '0';
-                s_tock       <= 0;     
+            if rst = '1' then
+                buzz_o <= '0';
+                s_tock <= 0;
             else
-                if (s_tock <= s_tock_on) then 
+                if rising_edge(echo_i) then
+                s_tock <= 0;
+                end if;
+                
+                if (s_tock <= s_tock_on) then
                     buzz_o <= '1';
                     s_tock <= s_tock + 1;
-                elsif (s_tock < s_tock_off and s_tock >= s_tock_on) then 
-                    s_tock <= s_tock + 1;
+                elsif (s_tock <= s_tock_off and s_tock >= s_tock_on) then
                     buzz_o <= '0';
+                    s_tock <= s_tock + 1;
                 else 
-                    s_tock <= 0; 
+                    s_tock <= 0;
                 end if;
-           end if;
-       end if;
+            end if;
+        end if;    
     end process p_buzz;
     
 end architecture Behavioral;

@@ -28,8 +28,8 @@ begin
     
     p_reset_gen : process is
     begin    
---        s_rst <= '1'; --first period of trigger (100ms), reset on
---        wait for 100 ms; 
+        s_rst <= '1'; --first period of trigger (100ms), reset on
+        wait for 50 ms; 
         s_rst <= '0'; --the rest of the time reset off
         wait;
     end process p_reset_gen;
@@ -39,17 +39,17 @@ begin
         s_echo_i <= '0'; 
         wait for 50 ms;         
         s_echo_i <= '1'; 
-        wait for 20 ms;
+        wait for 3.2 ms;
         s_echo_i <= '0';
-        wait for 80 ms;
-        s_echo_i <= '1';
-        wait for 7 ms;
+        wait for 100 ms;
+        s_echo_i <= '1'; 
+        wait for 6.4 ms;
         s_echo_i <= '0';
-        wait for 93 ms;
-        s_echo_i <= '1';
-        wait for 1 ms;
+        wait for 93.6 ms;
+        s_echo_i <= '1'; 
+        wait for 15 ms;
         s_echo_i <= '0';
-        wait for 99 ms;
+        wait for 85 ms;
         s_echo_i <= '0';
         wait;
     end process p_echo_gen;
