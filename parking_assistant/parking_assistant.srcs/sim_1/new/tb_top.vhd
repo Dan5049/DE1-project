@@ -63,22 +63,22 @@ begin
    p_reset_gen : process
    begin   
         s_rst <= '1';
-        s_echo_i <= '0';
+        s_echo_i <= '1';
         wait for 100 ms;
         s_rst <= '0';
         wait;       
    end process p_reset_gen; 
          
-   p_echo_gen : process
-   begin
-        s_echo_i <= '1';
-        wait for 100 ms;
-        s_echo_i <= '0';
-        wait for 100 ms;
-        s_echo_i <= '1';
-        wait for 200 ms;
-        s_echo_i <= '0';
-        wait;
-  end process p_echo_gen;
+--   p_echo_gen : process
+--   begin
+--        s_echo_i <= '1';
+--        wait for 100 ms;
+--        s_echo_i <= '0';
+--        wait for 100 ms;
+--        s_echo_i <= '1';
+--        wait for 200 ms;
+--        s_echo_i <= '0';
+--        wait;
+--  end process p_echo_gen;
          
 end Behavioral;
