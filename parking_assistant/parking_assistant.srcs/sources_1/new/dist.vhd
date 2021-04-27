@@ -7,7 +7,7 @@ port(
     clk       : in std_logic;
     rst       : in std_logic;
     echo_i    : in std_logic;
-    buzz_o    : inout std_logic;
+    buzz_o    : out std_logic;
     leds_o    : out std_logic_vector (10 - 1 downto 0));
 end entity dist;
 

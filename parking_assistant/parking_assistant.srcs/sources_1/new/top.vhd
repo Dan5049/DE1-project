@@ -35,10 +35,9 @@ entity top is
     port ( 
         CLK100MHZ   : in std_logic;
         btn         : in std_logic_vector (1 - 1 downto 0);
-        --Pmod Header JA
-        ja          : inout std_logic_vector (8 - 1 downto 0);
-        --Pmod Header JB
-        jb          : inout std_logic_vector (5 - 1 downto 0));
+        ja          : out std_logic_vector(8 - 1 downto 0);
+        jb          : out std_logic_vector (4 - 1 downto 0);
+        jc          : in std_logic_vector(1 - 1 downto 0));
 end top;
 
 architecture Behavioral of top is
@@ -47,16 +46,16 @@ begin
     
     trigger_top : entity work.trigger
         port map (
-            clk     => CLK100MHZ,
-            rst     => btn(0),
-            trig_o    => ja(0));
+            clk         => CLK100MHZ,
+            rst         => btn(0),
+            trig_o      => ja(0));
             
     dist_top    : entity work.dist
         port map (
             clk                     => CLK100MHZ,
             rst                     => btn(0),  
-            echo_i                  => ja(1),
-            buzz_o                  => ja(2), 
-            leds_o(5 - 1 downto 0)  => ja(8 - 1 downto 3),
-            leds_o(10 - 1 downto 5) => jb(5 - 1 downto 0)); 
+            buzz_o                  => ja(1), 
+            leds_o(6 - 1 downto 0)  => ja(8 - 1 downto 2),
+            leds_o(10 - 1 downto 6) => jb(4 - 1 downto 0),
+            echo_i                  => jc(0)); 
 end Behavioral;

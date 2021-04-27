@@ -53,10 +53,10 @@ begin
          btn(0)              => s_rst,
          ja(0)               => s_trig_o,
          
-         ja(1)               => s_echo_i,
-         ja(2)               => s_buzz_o,
-         ja(8 - 1 downto 3)  => s_leds_o_o(5 - 1 downto 0),
-         jb(5 - 1 downto 0)  => s_leds_o_o(10 - 1 downto 5));
+         ja(1)               => s_buzz_o,
+         ja(8 - 1 downto 2)  => s_leds_o_o(6 - 1 downto 0),
+         jb(4 - 1 downto 0)  => s_leds_o_o(10 - 1 downto 6),
+         jc(0)               => s_echo_i);
          
    s_clk <= not s_clk after clk_per / 2;
     
@@ -70,13 +70,22 @@ begin
          
    p_echo_gen : process
    begin
+      s_echo_i <= '0'; 
+        wait for 50 ms;         
+        s_echo_i <= '1'; 
+        wait for 3.2 ms;
         s_echo_i <= '0';
---        wait for 100 ms;
---        s_echo_i <= '0';
---        wait for 100 ms;
---        s_echo_i <= '1';
---        wait for 200 ms;
---        s_echo_i <= '0';
+        wait for 100 ms;
+        s_echo_i <= '1'; 
+        wait for 6.4 ms;
+        s_echo_i <= '0';
+        wait for 93.6 ms;
+        s_echo_i <= '1'; 
+        wait for 15 ms;
+        s_echo_i <= '0';
+        wait for 85 ms;
+        s_echo_i <= '0';
+        wait;
         wait;
   end process p_echo_gen;
          
