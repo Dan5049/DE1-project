@@ -70,20 +70,22 @@ begin
          
    p_echo_gen : process
    begin
-      s_echo_i <= '0'; 
+        s_echo_i <= '1'; 
+        wait for 50 ms;
+        s_echo_i <= '0';
         wait for 50 ms;         
         s_echo_i <= '1'; 
-        wait for 3.2 ms;
+        wait for 7 ms;
         s_echo_i <= '0';
-        wait for 100 ms;
+        wait for 93 ms;
         s_echo_i <= '1'; 
-        wait for 6.4 ms;
+        wait for 4.8 ms;
         s_echo_i <= '0';
-        wait for 93.6 ms;
+        wait for 95.2 ms;
         s_echo_i <= '1'; 
-        wait for 15 ms;
+        wait for 1.9 ms;
         s_echo_i <= '0';
-        wait for 85 ms;
+        wait for 98.1 ms;
         s_echo_i <= '0';
         wait;
         wait;
