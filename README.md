@@ -72,7 +72,7 @@ entity trigger is
 port(
     clk     : in std_logic;    --clock
     rst     : in std_logic;    --reset
-    trig_o  : out std_logic);  --trigger
+    trig_o  : out std_logic);  --trigger signal to sonar
 end entity trigger;
 
 architecture Behavioral of trigger is 
