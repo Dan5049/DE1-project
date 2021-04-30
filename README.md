@@ -86,7 +86,179 @@ Praktické provedení
 * bargraf může být osazen do patice DIL, což usnadní případnou výměnu za jiný typ (jiná barva světla)
 
 ## VHDL moduly a simulace
+### Modul *trigger*
+```
+library ieee;               -- Standard library
+use ieee.std_logic_1164.all;-- Package for data types and logic operations
+use ieee.numeric_std.all;   -- Package for arithmetic operations
 
+entity trigger is
+port(
+    clk     : in std_logic;    --clock
+    rst     : in std_logic;    --reset
+    trig_o  : out std_logic);  --trigger
+end entity trigger;
+
+architecture Behavioral of trigger is 
+    signal s_tick     : integer; --time counter, one tick is 10ns
+begin
+
+    p_trigger : process(clk)is
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then                                       --if reset is 1, set trigger and time counter to 0
+                trig_o <= '0'; 
+                s_tick <= 0;           
+            else
+                if (s_tick <= 1000) then                            --set trrigger to 1 for time equal to 1000 ticks (10us)
+                    trig_o <= '1';
+                    s_tick <= s_tick + 1;
+                elsif (s_tick < 10000000 and s_tick >= 1000) then   --set trigger to 0 for the rest of the time of 100ms
+                    s_tick <= s_tick + 1;
+                    trig_o <= '0';
+                else 
+                    s_tick <= 0;                                    --reset time counting
+                end if;
+           end if;
+       end if;
+    end process p_trigger;
+end architecture Behavioral;
+```
+Modul *trigger* slouží ke generování budícího signálu *trig_o* pro senzor *HC-SR04*. Pokud je *reset* v hodnotě 1, budící signál *trig_o* je nastavený na hodnotu 0. V opačném případě se počítá počet nástupných hran hodinového signálu *clk* a ukládá se do pomocného signálu *s_tick*. Podle hodnoty pomocného signálu *s_tick* se nastavuje hodnota budícího signálu *trig_o* do hodnoty 0 nebo 1.
+
+Hodnota uložená v pomocném signálu *s_tick* je čas v desítkách nanosekund. Pokud je hodnota pomocného signálu *s_tick* menší než 1000 (10μs), tak je nastavena hodnota budícího signálu *s_trig* na hodnotu 1. V opačném případě je nastavena na hodnotu 0. Pokud je hodnota pomocného signálu *s_tick* větší než 10000000 (100ms), tak dojde k vynulování pomocného signálu *s_tick*.
+
+<br>
+
+### Modul *dist*
+```
+library ieee;               -- Standard library
+use ieee.std_logic_1164.all;-- Package for data types and logic operations
+use ieee.numeric_std.all;   -- Package for arithmetic operations
+
+entity dist is
+port(
+    clk       : in std_logic;
+    rst       : in std_logic;
+    echo_i    : in std_logic;
+    buzz_o    : out std_logic;
+    leds_o    : out std_logic_vector (10 - 1 downto 0));
+end entity dist;
+
+architecture Behavioral of dist is 
+    signal s_tick     : integer;
+    signal s_dist     : integer;
+    signal s_tock     : integer;
+    signal s_tock_on  : integer;
+    signal s_tock_off : integer;
+begin
+
+    p_distance : process(clk, echo_i)is   -- getting distance
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                s_dist <= 10000;          -- if dist = 10000 - error value (10m - more than it's able to measure)
+                s_tick <= 0;
+            else
+                if echo_i = '1' then      -- if echo is on 1, start counting time
+                    s_tick <= s_tick +1; 
+                    s_dist <= s_tick /(100*58); 
+                else
+                    s_tick <= 0;
+                end if;
+            end if;
+        end if;
+    end process p_distance;
+    
+    p_bargraf : process (echo_i, s_dist)                   -- setting bargraf and setting signlas for buzzer
+    begin
+        if s_dist > 4000 then
+            leds_o <= "0000000000";
+            s_tock_on <= 0;
+            s_tock_off <= 0;
+        end if; 
+        if falling_edge (echo_i) then                     -- number of LEDs in on state and buzzing time
+            if (s_dist <= 4000 and s_dist >= 150) then
+                leds_o <= "0000000001";
+                s_tock_on <= 3000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 150 and s_dist >= 100) then
+                leds_o <= "0000000011";
+                s_tock_on <= 3500000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 100 and s_dist >= 80) then
+                leds_o <= "0000000111";
+                s_tock_on <= 4000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 80 and s_dist >= 70) then
+                leds_o <= "0000001111";
+                s_tock_on <= 4500000;
+                s_tock_off <= 10000000; 
+            elsif (s_dist < 70 and s_dist >= 60) then
+                leds_o <= "0000011111";
+                s_tock_on <= 5000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 60 and s_dist >= 50) then
+                leds_o <= "0000111111";
+                s_tock_on <= 6000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 50 and s_dist >= 40) then
+                leds_o <= "0001111111";
+                s_tock_on <= 7000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 40 and s_dist >= 35) then
+                leds_o <= "0011111111";
+                s_tock_on <= 8000000;
+                s_tock_off <= 10000000;
+            elsif (s_dist < 35 and s_dist >= 30) then
+                leds_o <= "0111111111";
+                s_tock_on <= 9000000;
+                s_tock_off <= 10000000;
+            elsif s_dist < 30 then
+                leds_o <= "1111111111";
+                s_tock_on <= 3000000;
+                s_tock_off <= s_tock_on + 1;
+            else
+                leds_o <= "0000000000";
+                s_tock_on <= 0;
+                s_tock_off <= 0;
+            end if;
+       end if;    
+    end process p_bargraf;
+     
+    p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is    -- buzzer controlling
+    begin
+        if rising_edge(clk) then
+            if rst = '1' then
+                buzz_o <= '0';
+                s_tock <= 0;
+            else
+                if rising_edge(echo_i) then
+                s_tock <= 0;
+                end if;
+                
+                if (s_tock <= s_tock_on) then
+                    buzz_o <= '1';
+                    s_tock <= s_tock + 1;
+                elsif (s_tock <= s_tock_off and s_tock >= s_tock_on) then
+                    buzz_o <= '0';
+                    s_tock <= s_tock + 1;
+                else 
+                    s_tock <= 0;
+                end if;
+            end if;
+        end if;    
+    end process p_buzz;
+    
+end architecture Behavioral;
+```
+Modul *dist* slouží k získání hodnoty vzdálenosti od objektu a následému ovládání výstupních signalizací. Skládá se ze tří procesů: *p_distance*, *p_bargraf* a *p_buzz*.
+
+Proces *p_distance* měří délku signálu *echo_i* přicházejícího ze senzoru *HC-SR04*. Stejně jak v modulu *trigger* se měří délka signálu *echo_i* na základě počtu náběžných hran hodinového signálu *clk*. Pokud je tedy hodnota signálu *echo_i* v hodnotě 1, počítá se počet náběžných hran signálu *clk* a ukládá se do pomocného signálu *s_tick*, který je stejně jak předtím v desítkách nanosekudn. Pokud je reset v hodnotě 1, dojde k vyresetování celého procesu a vzdálenost, uložená v pomocném signálu *s_dist*, se nastaví na hodnotu 10000. Tato hodnota odpovídá vzdálenosti 10m, což je hodnota vyšší, než je senzor schopen měřit - errorová hodnota. Jinak dochází k přepočtu délky signálu *echo_i* na vzdálenost, která se následně ukládá do pomocného signálu *s_dist*. Přepočet je uveden v datasheetu k senzoru *HC-SR04* - čas v mikrosekudnách děleno 58 je roven vzdálenosti v centimetrech.
+
+V procesu *p_bargraf* dochází k zapnutí určitého počtu LED, v závislosti na vzdálenosti (hodnota signálu *s_dist*). Počet rozsvícených LED není přímo úměrný vzdálenosti - pro větší vzdálenosti je odstup mezi jednotlivými LED větší než pro kratší vzdálenosti. Všechny LED svítí při vzdálenosti menší 30cm. Také se v tomto procesu nastavuje střída a perioda pro signál *s_buzz*, který spouští zvukovou signalizaci. Perioda signálu *s_buzz* je 100ms, střída se mění v závislosti na vzdálenosti a nastavuje se spolu s LED.
+
+V procesu *p_buzz* dochází ke generování signálu pro zvukovou signalizaci *s_buzz* v závisloti na hodnotách získaných v předchozím procesu. Pokud je vzdálenost od objektu menší než 30cm, je signál *s_buzz* nastaven na hodnotu 1 a nemění se. Čím je vzdálenost větší, tím kratší dobu je signál *s_buzz* nastaven na hodnotu 1.
 
 
 ## TOP modul a simulace
