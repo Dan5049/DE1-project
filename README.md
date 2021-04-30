@@ -41,8 +41,49 @@ Horna Aleš        [GitHub](https://github.com/xhorna16/Digital-electronics-1)
 | 8 | jb[2] | IO_L12P_T1_MRCC_15 | D15 |
 | 9 | jb[3] | IO_L12N_T1_MRCC_15 | C15 |
 
+<br>
 
+### Blokové schéma
+![Auto](images/BlockScheme.png)
 
+<br>
+
+Na blokovém schématu můžeme vidět princip fungování. *Clock generator* nám generuje hodinový signál o frekvenci 100MHz, který je přiváděn do bloku *Trigger generator* a *Distance counter*. Další vstup do obou bloků je *reset*. 
+
+Blok *Trigger generator* generuje řídící signál pro senzor *HC-SR04*. Tento signál je 10μs v hodnotě 1 a poté v hodnotě 0. Perioda tohoto signálu je 100ms.
+
+Výstup ze senzoru *HC-SR04* je přiváděn do bloku *Distance counter* jako signál *echo*. Podle délky tohoto signálu je zjištěna vzdálenost od objektu. Podle vzdálenosti od objektu se rozsvítí určitý počet LED a nastaví se délka pípání bzučáku.
+
+<br>
+
+### DPS
+#### Schéma zapojení přídavné desky
+![Schéma zapojení](images/schema.png)
+#### Náhled desky
+![Náhled desky](images/dps-nahled.png)
+
+<br>
+
+Blok optické a akustické signalisace
+* bargraf s 10 LED se spojenými katodami je přes předřadné odpory připojen na příslušné výstupy FPGA
+* samokmitající bzučák, napájený z 5V, je spínán tranzistorem MOSFET, ovládaným z výstupu FPGA
+* dále jsou obsaženy dva převodníky úrovní mezi 3,3V a 5V využité pro komunikaci mezi FPGA a ultrazvukovým snímačem
+Převodníky úrovní
+* řeší problém odlišných napětí odpovídajících logickým úrovním 1 na hlavní desce (s FPGA) a ultrazvukovém snímači
+* jako zdroje napětí 3,3V a 5V použijí se příslušné výstupy na hlavní desce
+* přenáší úroveň z jedné strany na druhou činností tranzistoru MOSFET
+* vstup pro úroveň s určitým napětím označen jako I3, resp. I5, podle napětí
+* výstup pro úroveň s určitým napětím označen jako O3, resp. O5, podle napětí
+* vysvětlení funkce na příkladu:
+	* na I3 je úroveň log. 0 (0V), T1 je otevřen (UGS=3,3V), úroveň 0 se tak přenese na výstup O5, kde bude napětí blízké nule (T1 otevřen)
+	* na I3 je úroveň log. 1 (3,3V), T1 je uzavřen (UGS=0V), úroveň 1 se tak přenese na výstup O5, kde bude napětí 5V (T1 uzavřen)
+	* funkce druhého převodníku je analogická
+Praktické provedení
+* většina součástek v provedení SMD, odpory-1206, tranzistory-SOT23, přesné informace v souboru "seznam-soucastek.txt"
+* tranzistory jsou MOSFET, typ 2N7002, prahové napětí UGSth, povolený proud ID a další parametry jsou postačující
+* jednostranná DPS, připojení k hlavní desce realisuje se pomocí páskových vodičů pájených do DPS bloku signalisace, na straně desky s FPGA připojeny pomocí vhodného konektoru
+* na DPS vyznačena místa pro vyvrtání otvorů pro eventuální uchycení 4 šrouby M3
+* bargraf může být osazen do patice DIL, což usnadní případnou výměnu za jiný typ (jiná barva světla)
 
 ## VHDL moduly a simulace
 
