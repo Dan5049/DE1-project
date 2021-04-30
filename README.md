@@ -17,32 +17,6 @@ Horna Aleš        [GitHub](https://github.com/xhorna16/Digital-electronics-1)
 ![Auto](images/CarScheme.png)
 
 ## Popis hardwaru
-### Tabulka propojení
-| **Signál**| **Výstupní pin** | **FPGA pin** | **FPGA package pin** |
-| :-: | :-: | :-: | :-: |
-| rst | btn[0] | IO_L6N_T0_VREF_16 | D9 |
-| echo_i | jc[0] | IO_L20P_T3_A08_D24_14 | U12 |
-| trig_o | ja[0] | IO_0_15 | G13 |
-| buzz_o | ja[1] | IO_L4P_T0_15 | B11 |
-
-<br>
-
-### Tabulka propojení bragrafu
-| **Signál -> leds_o**| **Výstupní pin** | **FPGA pin** | **FPGA package pin** |
-| :-: | :-: | :-: | :-: |
-| 0 | ja[2] | IO_L4N_T0_15 | A11 |
-| 1 | ja[3] | IO_L6P_T0_15 | D12 |
-| 2 | ja[4] | IO_L6N_T0_VREF_15 | D13 |
-| 3 | ja[5] | IO_L10P_T1_AD11P_15 | B18 |
-| 4 | ja[6] | IO_L10N_T1_AD11N_15 | A18 |
-| 5 | ja[7] | IO_25_15 | K16 |
-| 6 | jb[0] | IO_L11P_T1_SRCC_15 | E15 |
-| 7 | jb[1] | IO_L11N_T1_SRCC_15 | E16 |
-| 8 | jb[2] | IO_L12P_T1_MRCC_15 | D15 |
-| 9 | jb[3] | IO_L12N_T1_MRCC_15 | C15 |
-
-<br>
-
 ### Blokové schéma
 ![Auto](images/BlockScheme.png)
 
@@ -84,6 +58,8 @@ Praktické provedení
 * jednostranná DPS, připojení k hlavní desce realisuje se pomocí páskových vodičů pájených do DPS bloku signalisace, na straně desky s FPGA připojeny pomocí vhodného konektoru
 * na DPS vyznačena místa pro vyvrtání otvorů pro eventuální uchycení 4 šrouby M3
 * bargraf může být osazen do patice DIL, což usnadní případnou výměnu za jiný typ (jiná barva světla)
+
+Seznam součástek a osazovací plány na desku jsou na gitu ve složce *eagle*, popřípadě ve složce *images*
 
 ## VHDL moduly a simulace
 ### Modul *trigger*
@@ -127,6 +103,9 @@ end architecture Behavioral;
 Modul *trigger* slouží ke generování budícího signálu *trig_o* pro senzor *HC-SR04*. Pokud je *reset* v hodnotě 1, budící signál *trig_o* je nastavený na hodnotu 0. V opačném případě se počítá počet nástupných hran hodinového signálu *clk* a ukládá se do pomocného signálu *s_tick*. Podle hodnoty pomocného signálu *s_tick* se nastavuje hodnota budícího signálu *trig_o* do hodnoty 0 nebo 1.
 
 Hodnota uložená v pomocném signálu *s_tick* je čas v desítkách nanosekund. Pokud je hodnota pomocného signálu *s_tick* menší než 1000 (10μs), tak je nastavena hodnota budícího signálu *s_trig* na hodnotu 1. V opačném případě je nastavena na hodnotu 0. Pokud je hodnota pomocného signálu *s_tick* větší než 10000000 (100ms), tak dojde k vynulování pomocného signálu *s_tick*.
+
+#### Simulace triggru
+![Trigger simulace](images/TriggerGenerating.png)
 
 <br>
 
@@ -260,11 +239,67 @@ V procesu *p_bargraf* dochází k zapnutí určitého počtu LED, v závislosti 
 
 V procesu *p_buzz* dochází ke generování signálu pro zvukovou signalizaci *s_buzz* v závisloti na hodnotách získaných v předchozím procesu. Pokud je vzdálenost od objektu menší než 30cm, je signál *s_buzz* nastaven na hodnotu 1 a nemění se. Čím je vzdálenost větší, tím kratší dobu je signál *s_buzz* nastaven na hodnotu 1.
 
+Ve složce *buzzer* je kód v matlabu, kterým jsme zjištovali minimální slyšitelnou délku pulzu. Z toho důvodu jsme se rozhodli nastavit nejkratší použitou časovou délku pulzu na 30ms.
+
+#### Tabulka nastavení počtu LED a střídy bzučáku
+| Vzdálenost [cm] | Počet LED | Střída [%] |
+|:-:|:-:|:-:|
+| nad 400 | 0 | 0 | 0 |
+| 150 až 400 | 1 | 30 |
+| 100 až 150 | 2 | 35 |
+|  80 až 100 | 3 | 40 |
+|  70 až  80 | 4 | 45 |
+|  60 až  70 | 5 | 50 |
+|  50 až  60 | 6 | 60 |
+|  40 až  50 | 7 | 70 |
+|  35 až  40 | 8 | 80 |
+|  30 až  35 | 9 | 90 |
+|  pod  30 | 10 | 100 |
+
+<br>
+
+#### Průběh simulace LED
+![Simulace LED](images/ledkytest.png)
+
+<br>
+
+#### Průběhy simulace bzučáku
+![Simulace bzučáku 1](images/Buzz_simulation_figures/buzz12.png)
+![Simulace bzučáku 2](images/Buzz_simulation_figures/buzz34.png)
+![Simulace bzučáku 3](images/Buzz_simulation_figures/buzz56.png)
+![Simulace bzučáku 4](images/Buzz_simulation_figures/buzz78.png)
+![Simulace bzučáku 5](images/Buzz_simulation_figures/buzz910.png)
 
 ## TOP modul a simulace
+![Top modul](images/TopScheme.png)
 
+Na diagramu top modulu můžeme vidět jednotlivé propojení modulů. 
 
+### Tabulka propojení
+| **Signál**| **Výstupní pin** | **FPGA pin** | **FPGA package pin** |
+| :-: | :-: | :-: | :-: |
+| rst | btn[0] | IO_L6N_T0_VREF_16 | D9 |
+| echo_i | jc[0] | IO_L20P_T3_A08_D24_14 | U12 |
+| trig_o | ja[0] | IO_0_15 | G13 |
+| buzz_o | ja[1] | IO_L4P_T0_15 | B11 |
 
+<br>
+
+### Tabulka propojení bragrafu
+| **Signál -> leds_o**| **Výstupní pin** | **FPGA pin** | **FPGA package pin** |
+| :-: | :-: | :-: | :-: |
+| 0 | ja[2] | IO_L4N_T0_15 | A11 |
+| 1 | ja[3] | IO_L6P_T0_15 | D12 |
+| 2 | ja[4] | IO_L6N_T0_VREF_15 | D13 |
+| 3 | ja[5] | IO_L10P_T1_AD11P_15 | B18 |
+| 4 | ja[6] | IO_L10N_T1_AD11N_15 | A18 |
+| 5 | ja[7] | IO_25_15 | K16 |
+| 6 | jb[0] | IO_L11P_T1_SRCC_15 | E15 |
+| 7 | jb[1] | IO_L11N_T1_SRCC_15 | E16 |
+| 8 | jb[2] | IO_L12P_T1_MRCC_15 | D15 |
+| 9 | jb[3] | IO_L12N_T1_MRCC_15 | C15 |
+
+<br>
 
 ## Video
 
