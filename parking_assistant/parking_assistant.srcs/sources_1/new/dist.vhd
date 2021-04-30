@@ -6,20 +6,20 @@ entity dist is
 port(
     clk       : in std_logic;
     rst       : in std_logic;
-    echo_i    : in std_logic;
-    buzz_o    : out std_logic;
+    echo_i    : in std_logic;  --input from sonar
+    buzz_o    : out std_logic; --output to buzzer
     leds_o    : out std_logic_vector (10 - 1 downto 0));
 end entity dist;
 
 architecture Behavioral of dist is 
-    signal s_tick     : integer;
-    signal s_dist     : integer;
-    signal s_tock     : integer;
-    signal s_tock_on  : integer;
-    signal s_tock_off : integer;
+    signal s_tick     : integer; --auxiliary variable for time counting
+    signal s_dist     : integer; --auxiliary variable for distance counting
+    signal s_tock     : integer; --auxiliary variable for time counting
+    signal s_tock_on  : integer; --duty cycle for PWM signal to buzzer
+    signal s_tock_off : integer; --period of the PWM signal
 begin
 
-    p_distance : process(clk, echo_i)is
+    p_distance : process(clk, echo_i)is --measure distance 
     begin
         if rising_edge(clk) then
             if rst = '1' then
@@ -28,7 +28,7 @@ begin
             else
                 if echo_i = '1' then -- if echo is on 1, start counting time
                     s_tick <= s_tick +1; 
-                    s_dist <= s_tick /(100*58); 
+                    s_dist <= s_tick /(100*58); --conversion of ticks to distnace
                 else
                     s_tick <= 0;
                 end if;
@@ -36,7 +36,7 @@ begin
         end if;
     end process p_distance;
     
-    p_bargraf : process (echo_i, s_dist)
+    p_bargraf : process (echo_i, s_dist)  --set the number of leds and duty cycle of buzzer
     begin
         if s_dist > 4000 then
             leds_o <= "0000000000";
@@ -44,43 +44,43 @@ begin
             s_tock_off <= 0;
         end if; 
         if falling_edge (echo_i) then
-            if (s_dist <= 4000 and s_dist >= 150) then
+            if (s_dist <= 4000 and s_dist >= 150) then --distance 4m to 1.5m
                 leds_o <= "0000000001";
                 s_tock_on <= 3000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 150 and s_dist >= 100) then
+            elsif (s_dist < 150 and s_dist >= 100) then --distance 1.5m to 1m
                 leds_o <= "0000000011";
                 s_tock_on <= 3500000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 100 and s_dist >= 80) then
+            elsif (s_dist < 100 and s_dist >= 80) then --distance 1m to 0.8m
                 leds_o <= "0000000111";
                 s_tock_on <= 4000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 80 and s_dist >= 70) then
+            elsif (s_dist < 80 and s_dist >= 70) then --distance 0.8m to 0.7m
                 leds_o <= "0000001111";
                 s_tock_on <= 4500000;
                 s_tock_off <= 10000000; 
-            elsif (s_dist < 70 and s_dist >= 60) then
+            elsif (s_dist < 70 and s_dist >= 60) then --distance 0.7m to 0.6m
                 leds_o <= "0000011111";
                 s_tock_on <= 5000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 60 and s_dist >= 50) then
+            elsif (s_dist < 60 and s_dist >= 50) then --distance 0.6m to 0.5m
                 leds_o <= "0000111111";
                 s_tock_on <= 6000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 50 and s_dist >= 40) then
+            elsif (s_dist < 50 and s_dist >= 40) then --distance 0.5m to 0.4m
                 leds_o <= "0001111111";
                 s_tock_on <= 7000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 40 and s_dist >= 35) then
+            elsif (s_dist < 40 and s_dist >= 35) then --distance 0.4m to 0.35m
                 leds_o <= "0011111111";
                 s_tock_on <= 8000000;
                 s_tock_off <= 10000000;
-            elsif (s_dist < 35 and s_dist >= 30) then
+            elsif (s_dist < 35 and s_dist >= 30) then --distance 0.35m to 0.3m
                 leds_o <= "0111111111";
                 s_tock_on <= 9000000;
                 s_tock_off <= 10000000;
-            elsif s_dist < 30 then
+            elsif s_dist < 30 then                      --distance less than 0.3m
                 leds_o <= "1111111111";
                 s_tock_on <= 3000000;
                 s_tock_off <= s_tock_on + 1;
@@ -93,7 +93,7 @@ begin
     end process p_bargraf;
     
     p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
-    begin
+    begin                           -- controll buzzer based on the duty cycle values from p_bargraf
         if rising_edge(clk) then
             if rst = '1' then
                 buzz_o <= '0';
