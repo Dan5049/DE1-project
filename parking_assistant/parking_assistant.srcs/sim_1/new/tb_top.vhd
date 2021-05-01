@@ -75,9 +75,9 @@ begin
         s_echo_i <= '0';
         wait for 50 ms;         
         s_echo_i <= '1'; 
-        wait for 7 ms;
+        wait for 10 ms;
         s_echo_i <= '0';
-        wait for 93 ms;
+        wait for 90 ms;
         s_echo_i <= '1'; 
         wait for 4.8 ms;
         s_echo_i <= '0';

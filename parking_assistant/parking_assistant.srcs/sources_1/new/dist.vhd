@@ -17,6 +17,7 @@ architecture Behavioral of dist is
     signal s_tock     : integer; --auxiliary variable for time counting
     signal s_tock_on  : integer; --duty cycle for PWM signal to buzzer
     signal s_tock_off : integer; --period of the PWM signal
+    signal s_xyz      : std_logic := '1'; --echo rising edge detection signal
 begin
 
     p_distance : process(clk, echo_i)is --measure distance 
@@ -36,14 +37,14 @@ begin
         end if;
     end process p_distance;
     
-    p_bargraf : process (echo_i, s_dist)  --set the number of leds and duty cycle of buzzer
+    p_bargraf : process (echo_i, s_dist, s_xyz)  --set the number of leds and duty cycle of buzzer
     begin
         if s_dist > 4000 then
             leds_o <= "0000000000";
             s_tock_on <= 0;
             s_tock_off <= 0;
         end if; 
-        if falling_edge (echo_i) then
+        if s_xyz = '0' and echo_i = '1' then
             if (s_dist <= 4000 and s_dist >= 150) then --distance 4m to 1.5m
                 leds_o <= "0000000001";
                 s_tock_on <= 3000000;
@@ -89,7 +90,8 @@ begin
                 s_tock_on <= 0;
                 s_tock_off <= 0;
             end if;
-       end if;    
+       end if;
+       s_xyz <= echo_i;    
     end process p_bargraf;
     
     p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
@@ -98,11 +100,7 @@ begin
             if rst = '1' then
                 buzz_o <= '0';
                 s_tock <= 0;
-            else
-                if rising_edge(echo_i) then
-                s_tock <= 0;
-                end if;
-                
+            else                
                 if (s_tock <= s_tock_on) then
                     buzz_o <= '1';
                     s_tock <= s_tock + 1;
