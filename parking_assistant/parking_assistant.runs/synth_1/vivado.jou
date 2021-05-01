@@ -2,11 +2,11 @@
 # Vivado v2020.2 (64-bit)
 # SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
 # IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
-# Start of session at: Sat May  1 20:50:39 2021
-# Process ID: 8268
-# Current directory: D:/Skola/parking_assistant/parking_assistant.runs/synth_1
+# Start of session at: Sat May  1 21:37:48 2021
+# Process ID: 476
+# Current directory: D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/synth_1
 # Command line: vivado.exe -log top.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source top.tcl
-# Log file: D:/Skola/parking_assistant/parking_assistant.runs/synth_1/top.vds
-# Journal file: D:/Skola/parking_assistant/parking_assistant.runs/synth_1\vivado.jou
+# Log file: D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/synth_1/top.vds
+# Journal file: D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/synth_1\vivado.jou
 #-----------------------------------------------------------
 source top.tcl -notrace

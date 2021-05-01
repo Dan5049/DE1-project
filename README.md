@@ -130,13 +130,14 @@ architecture Behavioral of dist is
     signal s_tock     : integer; --auxiliary variable for time counting
     signal s_tock_on  : integer; --duty cycle for PWM signal to buzzer
     signal s_tock_off : integer; --period of the PWM signal
+    signal s_xyz      : std_logic := '1'; --echo rising edge detection signal
 begin
 
     p_distance : process(clk, echo_i)is --measure distance 
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                s_dist <= 10000; -- if dist = 10000 - error value (10m - more than it's able to measure)
+                s_dist <= 1000; -- if dist = 10000 - error value (10m - more than it's able to measure)
                 s_tick <= 0;
             else
                 if echo_i = '1' then -- if echo is on 1, start counting time
@@ -149,14 +150,14 @@ begin
         end if;
     end process p_distance;
     
-    p_bargraf : process (echo_i, s_dist)  --set the number of leds and duty cycle of buzzer
+    p_bargraf : process (echo_i, s_dist, s_xyz)  --set the number of leds and duty cycle of buzzer
     begin
-        if s_dist > 4000 then
+        if s_dist > 400 then
             leds_o <= "0000000000";
             s_tock_on <= 0;
-            s_tock_off <= 0;
+            s_tock_off <= 100000000; --------------------------------------------------------
         end if; 
-        if falling_edge (echo_i) then
+        if s_xyz = '1' and echo_i = '0' then
             if (s_dist <= 4000 and s_dist >= 150) then --distance 4m to 1.5m
                 leds_o <= "0000000001";
                 s_tock_on <= 3000000;
@@ -200,9 +201,10 @@ begin
             else
                 leds_o <= "0000000000";
                 s_tock_on <= 0;
-                s_tock_off <= 0;
+                s_tock_off <= 100000000; -----------------------------------
             end if;
-       end if;    
+       end if;
+       s_xyz <= echo_i;    
     end process p_bargraf;
     
     p_buzz : process(clk, s_tock, s_tock_on, s_tock_off, echo_i)is
@@ -211,11 +213,7 @@ begin
             if rst = '1' then
                 buzz_o <= '0';
                 s_tock <= 0;
-            else
-                if rising_edge(echo_i) then
-                s_tock <= 0;
-                end if;
-                
+            else                
                 if (s_tock <= s_tock_on) then
                     buzz_o <= '1';
                     s_tock <= s_tock + 1;
@@ -230,7 +228,6 @@ begin
     end process p_buzz;
     
 end architecture Behavioral;
-
 ```
 Modul *dist* slouží k získání hodnoty vzdálenosti od objektu a následému ovládání výstupních signalizací. Skládá se ze tří procesů: *p_distance*, *p_bargraf* a *p_buzz*.
 
@@ -260,16 +257,16 @@ Ve složce *buzzer* je kód v matlabu, kterým jsme zjištovali minimální sly�
 <br>
 
 #### Průběh simulace LED
-![Simulace LED](images/ledkytest.png)
+![Simulace LED](images/)
 
 <br>
 
 #### Průběhy simulace bzučáku
-![Simulace bzučáku 1](images/Buzz_simulation_figures/buzz12.png)
-![Simulace bzučáku 2](images/Buzz_simulation_figures/buzz34.png)
-![Simulace bzučáku 3](images/Buzz_simulation_figures/buzz56.png)
-![Simulace bzučáku 4](images/Buzz_simulation_figures/buzz78.png)
-![Simulace bzučáku 5](images/Buzz_simulation_figures/buzz910.png)
+![Simulace bzučáku 1]()
+![Simulace bzučáku 2](images/)
+![Simulace bzučáku 3](images/)
+![Simulace bzučáku 4](images/)
+![Simulace bzučáku 5](images/)
 
 ## TOP modul a simulace
 ![Top modul](images/TopScheme.png)

@@ -17,7 +17,7 @@ proc create_report { reportName command } {
   }
 }
 namespace eval ::optrace {
-  variable script "D:/Skola/parking_assistant/parking_assistant.runs/impl_1/top.tcl"
+  variable script "D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/impl_1/top.tcl"
   variable category "vivado_impl"
 }
 
@@ -131,15 +131,15 @@ OPTRACE "create in-memory project" START { }
   set_param project.singleFileAddWarning.threshold 0
 OPTRACE "create in-memory project" END { }
 OPTRACE "set parameters" START { }
-  set_property webtalk.parent_dir D:/Skola/parking_assistant/parking_assistant.cache/wt [current_project]
-  set_property parent.project_path D:/Skola/parking_assistant/parking_assistant.xpr [current_project]
-  set_property ip_output_repo D:/Skola/parking_assistant/parking_assistant.cache/ip [current_project]
+  set_property webtalk.parent_dir D:/Projects/DE1-project/parking_assistant/parking_assistant.cache/wt [current_project]
+  set_property parent.project_path D:/Projects/DE1-project/parking_assistant/parking_assistant.xpr [current_project]
+  set_property ip_output_repo D:/Projects/DE1-project/parking_assistant/parking_assistant.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
-  add_files -quiet D:/Skola/parking_assistant/parking_assistant.runs/synth_1/top.dcp
+  add_files -quiet D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/synth_1/top.dcp
 OPTRACE "read constraints: implementation" START { }
-  read_xdc D:/Skola/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc
+  read_xdc D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc
 OPTRACE "read constraints: implementation" END { }
 OPTRACE "add files" END { }
 OPTRACE "link_design" START { }

@@ -36,21 +36,23 @@ begin
     
     p_echo_gen : process is
     begin    
+        s_echo_i <= '1'; 
+        wait for 20 ms;         
         s_echo_i <= '0'; 
-        wait for 50 ms;         
-        s_echo_i <= '1'; 
-        wait for 10 ms;
-        s_echo_i <= '0';
-        wait for 90 ms;
-        s_echo_i <= '1'; 
-        wait for 6.4 ms;
-        s_echo_i <= '0';
-        wait for 93.6 ms;
-        s_echo_i <= '1'; 
-        wait for 15 ms;
-        s_echo_i <= '0';
-        wait for 85 ms;
-        s_echo_i <= '0';
+        wait for 30 ms;
+        s_echo_i <= '1';
+        wait for 5 ms;
+        s_echo_i <= '0'; 
+        wait for 95 ms;
+        s_echo_i <= '1';
+        wait for 3 ms;
+        s_echo_i <= '0'; 
+        wait for 97 ms;
+        s_echo_i <= '1';
+        wait for 1.8 ms;
+        s_echo_i <= '0'; 
+--       wait for 98.2 ms;
+        
         wait;
     end process p_echo_gen;
     

@@ -4,7 +4,7 @@
 
 set TIME_start [clock seconds] 
 namespace eval ::optrace {
-  variable script "D:/Skola/parking_assistant/parking_assistant.runs/synth_1/top.tcl"
+  variable script "D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/synth_1/top.tcl"
   variable category "vivado_synth"
 }
 
@@ -70,7 +70,6 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 1
 set_msg_config -id {Common 17-41} -limit 10000000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a100tcsg324-1
@@ -78,19 +77,19 @@ create_project -in_memory -part xc7a100tcsg324-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
-set_property webtalk.parent_dir D:/Skola/parking_assistant/parking_assistant.cache/wt [current_project]
-set_property parent.project_path D:/Skola/parking_assistant/parking_assistant.xpr [current_project]
+set_property webtalk.parent_dir D:/Projects/DE1-project/parking_assistant/parking_assistant.cache/wt [current_project]
+set_property parent.project_path D:/Projects/DE1-project/parking_assistant/parking_assistant.xpr [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property board_part digilentinc.com:arty-a7-100:part0:1.0 [current_project]
-set_property ip_output_repo d:/Skola/parking_assistant/parking_assistant.cache/ip [current_project]
+set_property ip_output_repo d:/Projects/DE1-project/parking_assistant/parking_assistant.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
 read_vhdl -library xil_defaultlib {
-  D:/Skola/parking_assistant/parking_assistant.srcs/sources_1/new/dist.vhd
-  D:/Skola/parking_assistant/parking_assistant.srcs/sources_1/new/trigger.vhd
-  D:/Skola/parking_assistant/parking_assistant.srcs/sources_1/new/top.vhd
+  D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/sources_1/new/dist.vhd
+  D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/sources_1/new/trigger.vhd
+  D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/sources_1/new/top.vhd
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -101,8 +100,8 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
-read_xdc D:/Skola/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc
-set_property used_in_implementation false [get_files D:/Skola/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc]
+read_xdc D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc
+set_property used_in_implementation false [get_files D:/Projects/DE1-project/parking_assistant/parking_assistant.srcs/constrs_1/imports/resources/Arty-A7-100-Master.xdc]
 
 set_param ips.enableIPCacheLiteLoad 1
 close [open __synthesis_is_running__ w]

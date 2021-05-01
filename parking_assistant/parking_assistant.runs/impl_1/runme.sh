@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='D:/Skola/parking_assistant/parking_assistant.runs/impl_1'
+HD_PWD='D:/Projects/DE1-project/parking_assistant/parking_assistant.runs/impl_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log
