@@ -84,7 +84,7 @@ begin
             elsif s_dist < 30 then                      --distance less than 0.3m
                 leds_o <= "1111111111";
                 s_tock_on <= 3000000;
-                s_tock_off <= s_tock_on + 1;
+                s_tock_off <= 0;
             else
                 leds_o <= "0000000000";
                 s_tock_on <= 0;
