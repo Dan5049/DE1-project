@@ -137,7 +137,7 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                s_dist <= 1000; -- if dist = 10000 - error value (10m - more than it's able to measure)
+                s_dist <= 1000; -- if dist = 1000 - error value (10m - more than it's able to measure)
                 s_tick <= 0;
             else
                 if echo_i = '1' then -- if echo is on 1, start counting time
@@ -373,7 +373,7 @@ Projekt by se dal rozšířit přidáním dalších dvou ultrazvukových senzor�
 Projekt jsme také realizovali pomocí desky Arduino, stejného senzoru HC-SR04, bzučáku a čtyř ledek namísto bargrafu.
 
 ## Video
-https://drive.google.com/file/d/18ILoBno3hiMNqDnNoh6uOZaAPErlnejO/view?usp=sharing
+[Prezentacia projektu](https://drive.google.com/file/d/18ILoBno3hiMNqDnNoh6uOZaAPErlnejO/view?usp=sharing)
   
 [Prezentacia na Arduine](https://drive.google.com/file/d/1YwLW6wj0uFljxe86JlJZtg1215zJ4bRm/view?usp=sharing)
 

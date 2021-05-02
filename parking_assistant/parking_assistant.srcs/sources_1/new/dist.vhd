@@ -24,7 +24,7 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                s_dist <= 1000; -- if dist = 10000 - error value (10m - more than it's able to measure)
+                s_dist <= 1000; -- if dist = 1000 - error value (10m - more than it's able to measure)
                 s_tick <= 0;
             else
                 if echo_i = '1' then -- if echo is on 1, start counting time
