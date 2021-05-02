@@ -197,7 +197,7 @@ begin
             elsif s_dist < 30 then                      --distance less than 0.3m
                 leds_o <= "1111111111";
                 s_tock_on <= 3000000;
-                s_tock_off <= s_tock_on + 1;
+                s_tock_off <= 0;
             else
                 leds_o <= "0000000000";
                 s_tock_on <= 0;
@@ -257,16 +257,16 @@ Ve složce *buzzer* je kód v matlabu, kterým jsme zjištovali minimální sly�
 <br>
 
 #### Průběh simulace LED
-![Simulace LED](images/)
+![Simulace LED](images/ledkytest.png)
 
 <br>
 
 #### Průběhy simulace bzučáku
-![Simulace bzučáku 1]()
-![Simulace bzučáku 2](images/)
-![Simulace bzučáku 3](images/)
-![Simulace bzučáku 4](images/)
-![Simulace bzučáku 5](images/)
+![Simulace bzučáku 1](images/Buzz_simulation_figures/buzz1,2.png)
+![Simulace bzučáku 2](images/Buzz_simulation_figures/buzz3,4.png)
+![Simulace bzučáku 3](images/Buzz_simulation_figures/buzz5,6.png)
+![Simulace bzučáku 4](images/Buzz_simulation_figures/buzz7,8.png)
+![Simulace bzučáku 5](images/Buzz_simulation_figures/buzz9,10.png)
 
 ## TOP modul a simulace
 ![Top modul](images/TopScheme.png)
