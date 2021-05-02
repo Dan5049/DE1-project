@@ -365,6 +365,13 @@ end Behavioral;
 ### Simulace topu
 ![Top simulace](images/TopSim.png)
 
+## Dosažené cíle
+Povedlo se vytvořit parkovacího asistenta s jedním ultrazvukovým senzorem, zvukovou signalizací pomocí bzučáku a optickou signalizací pomocí bargrafu. Generování *triggrovacího* signálu a optická signalizace funguje bez problému. Při generování signálu pro bzučák se na počátku prvního *echa* oběví krátký pulz. Tento pulz je nechtěný, ale je tak krátky, že ho člověk není schopen zaregistrovat.
+
+Projekt by se dal rozšířit přidáním dalších dvou ultrazvukových senzorů a bargrafů. Také by pro praktické použití na autě bylo vhodné vybrat jiný senzor (odolnější proti povětrnostním a pracovním podmínkám).
+
+Projekt jsme také realizovali pomocí desky Arduino, stejného senzoru HC-SR04, bzučáku a čtyř ledek namísto bargrafu.
+
 ## Video
 
 
