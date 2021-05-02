@@ -42,10 +42,10 @@ begin
         if s_dist > 400 then
             leds_o <= "0000000000";
             s_tock_on <= 0;
-            s_tock_off <= 100000000; --------------------------------------------------------
+            s_tock_off <= 100000000;
         end if; 
         if s_xyz = '1' and echo_i = '0' then
-            if (s_dist <= 4000 and s_dist >= 150) then --distance 4m to 1.5m
+            if (s_dist <= 400 and s_dist >= 150) then --distance 4m to 1.5m
                 leds_o <= "0000000001";
                 s_tock_on <= 3000000;
                 s_tock_off <= 10000000;
@@ -88,7 +88,7 @@ begin
             else
                 leds_o <= "0000000000";
                 s_tock_on <= 0;
-                s_tock_off <= 100000000; -----------------------------------
+                s_tock_off <= 100000000;
             end if;
        end if;
        s_xyz <= echo_i;    
